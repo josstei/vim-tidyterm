@@ -1,26 +1,14 @@
-function! tidyterm#buffer#Create() abort
-    if has('nvim')
-        botright 15split
-        terminal
-    else
+function! tidyterm#buffer#Get() abort
+    if !bufexists(g:term_bufnr) || !buflisted(g:term_bufnr)
         botright terminal
-        resize 15
+        let g:term_bufnr = bufnr('%')
+    else
+        botright split
+        execute 'buffer' g:term_bufnr
     endif
-endfunction
-
-function! tidyterm#buffer#Focus() abort
-    if has('nvim') | botright 15split | endif | execute 'buffer' g:term_bufnr
+    resize 15
 endfunction
 
 function! tidyterm#buffer#Previous() abort
     if win_gotoid(g:prev_winid) == 0 | wincmd p | endif
 endfunction
-
-function! tidyterm#buffer#Get() abort
-    if !bufexists(g:term_bufnr) || !buflisted(g:term_bufnr)
-        call tidyterm#buffer#Create()
-        let g:term_bufnr = bufnr('%')
-        return 1
-    endif
-endfunction
-
