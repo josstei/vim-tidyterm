@@ -4,10 +4,12 @@ function! tidyterm#terminal#Hide() abort
 endfunction
 
 function! tidyterm#terminal#Show() abort
-    let g:prev_winid = win_getid()
     call tidyterm#buffer#Get() 
-    let g:term_winid = win_getid()
-    startinsert
+    if has('nvim')
+        startinsert
+    elseif &buftype ==# 'terminal' && mode() ==# 'n'
+        call feedkeys("i", "n")
+    endif
 endfunction
 
 function! tidyterm#terminal#Active() abort
