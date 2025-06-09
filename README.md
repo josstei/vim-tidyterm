@@ -7,6 +7,8 @@
 ## Features
 
 - Quickly toggle (show/hide) a persistent terminal buffer in Vim or Neovim.
+- Optionally autostart the terminal when Vim/Neovim opens.
+- Configurable terminal position and size.
 - Remembers your previous window and returns you there when hiding the terminal.
 - Compatible with both Vim and Neovim, handling their differences in terminal mode behavior.
 - Simple key mappings for seamless workflow integration.
@@ -62,12 +64,13 @@ tnoremap <silent> <C-_> <C-\><C-n>:TidyTerm<CR>
 - Press your mapping (e.g., `Ctrl-/`) in normal or terminal mode to show or hide the terminal.
 - When showing, you’re dropped directly into terminal-insert mode (ready to type commands).
 - When hiding, your previous window is restored.
+- If autostart is enabled, the terminal opens automatically on Vim/Neovim startup.
 
 ---
 
 ## Example Workflow
 
-1. Press `Ctrl-/` to open your terminal at the bottom.
+1. Press `Ctrl-/` to open your terminal at the bottom (or your configured position).
 2. Run shell commands or scripts.
 3. Press `Ctrl-/` again to hide the terminal and return to your editing window.
 4. Repeat as needed — the terminal buffer persists across toggles.
@@ -76,19 +79,37 @@ tnoremap <silent> <C-_> <C-\><C-n>:TidyTerm<CR>
 
 ## Configuration
 
-No configuration is necessary for most users.
+While the plugin works out of the box, several options are available for customization. Add these to your `vimrc` or `init.vim`:
 
-However, you can customize:
+```vim
+" Automatically open the terminal when Vim/Neovim starts
+" Default: 0 (disabled)
+let g:tidyterm_autostart = 1
 
-- Key mappings
-- Behavior via additional Vimscript in your config
+" Set terminal position: 'bottom', 'top', 'left', or 'right'
+" Default: 'bottom'
+let g:tidyterm_position = 'left'
+
+" Set the size of the terminal split (height or width depending on position)
+" Default: 20
+let g:tidyterm_size = 30
+```
+
+### Position Options
+
+| Value   | Description                    |
+|---------|--------------------------------|
+| `bottom` | Terminal appears below the editor (horizontal split) |
+| `top`    | Terminal appears above the editor (horizontal split) |
+| `left`   | Terminal appears on the left side (vertical split)   |
+| `right`  | Terminal appears on the right side (vertical split)  |
 
 ---
 
 ## Compatibility
 
-- **Neovim**: Full support, smooth terminal-insert mode transitions.
-- **Vim 8+**: Supported with workarounds for terminal mode switching.
+- **Neovim**
+- **Vim 8+**
 
 ---
 
