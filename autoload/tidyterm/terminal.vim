@@ -1,6 +1,6 @@
 function! tidyterm#terminal#Hide() abort
     call tidyterm#terminal#Close()
-    call tidyterm#buffer#Previous()
+    call tidyterm#buffer#ToPrevious()
 endfunction
 
 function! tidyterm#terminal#Show() abort
