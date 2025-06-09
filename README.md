@@ -1,3 +1,5 @@
+![Stable](https://img.shields.io/badge/status-stable-brightgreen) ![License](https://img.shields.io/badge/license-MIT-blue)
+
 # vim-tidyterm
 
 **A lightweight Vim/Neovim plugin for quickly toggling a dedicated terminal buffer.**
