@@ -95,6 +95,10 @@ let g:tidyterm_position = 'left'
 " Set the size of the terminal split (height or width depending on position)
 " Default: 20
 let g:tidyterm_size = 30
+
+" Set filetype for terminal buffer (enables syntax highlighting)
+" Default: '' (empty, no filetype set)
+let g:tidyterm_filetype = 'sh'
 ```
 
 ### Position Options
@@ -105,6 +109,27 @@ let g:tidyterm_size = 30
 | `top`    | Terminal appears above the editor (horizontal split) |
 | `left`   | Terminal appears on the left side (vertical split)   |
 | `right`  | Terminal appears on the right side (vertical split)  |
+
+### Filetype Options
+
+Setting `g:tidyterm_filetype` enables syntax highlighting in the terminal buffer. This can be useful for:
+
+- **Shell scripting**: Set to `'sh'` for basic shell syntax highlighting
+- **Zsh users**: Set to `'zsh'` for zsh-specific features if available
+- **Custom highlighting**: Use any valid Vim filetype for specialized highlighting
+
+**Examples:**
+
+```vim
+" Enable shell syntax highlighting
+let g:tidyterm_filetype = 'sh'
+
+" For zsh-specific features
+let g:tidyterm_filetype = 'zsh'
+
+" For bash-specific features  
+let g:tidyterm_filetype = 'bash'
+```
 
 ---
 
