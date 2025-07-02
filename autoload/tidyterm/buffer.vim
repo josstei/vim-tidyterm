@@ -58,6 +58,13 @@ function! tidyterm#buffer#CallTerminal() abort
         call term_start(&shell, {'curwin': v:true})
     endif
     let g:term_bufnr = bufnr('%')
+    call tidyterm#buffer#SetFiletype()
+endfunction
+
+function! tidyterm#buffer#SetFiletype() abort
+    if exists('g:tidyterm_filetype') && !empty(g:tidyterm_filetype)
+        execute 'setlocal filetype=' . g:tidyterm_filetype
+    endif
 endfunction
 
 function! tidyterm#buffer#Get() abort
