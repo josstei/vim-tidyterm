@@ -15,10 +15,6 @@ if !exists('g:tidyterm_position')
     let g:tidyterm_size=15
 endif
 
-if !exists('g:tidyterm_filetype')
-    let g:tidyterm_filetype = ''
-endif
-
 let g:tidyterm_loaded   = 1
 let g:term_bufnr        = -1
 let g:term_winid        = -1

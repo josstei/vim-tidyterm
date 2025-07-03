@@ -62,9 +62,7 @@ function! tidyterm#buffer#CallTerminal() abort
 endfunction
 
 function! tidyterm#buffer#SetFiletype() abort
-    if exists('g:tidyterm_filetype') && !empty(g:tidyterm_filetype)
-        execute 'setlocal filetype=' . g:tidyterm_filetype
-    endif
+    execute 'setlocal filetype=tidyterm'
 endfunction
 
 function! tidyterm#buffer#Get() abort
