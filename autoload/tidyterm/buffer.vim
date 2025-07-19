@@ -1,17 +1,46 @@
+let s:tidyterm_map = {
+    \     'left': {
+    \       'split'     : 'vsplit',
+    \       'position'  : 'topleft',
+    \       'resize'    : 'vertical resize',
+    \       'size'      : 50 
+    \     },
+    \     'right': {
+    \       'split'     : 'vsplit',
+    \       'position'  : 'botright',
+    \       'resize'    : 'vertical resize',
+    \       'size'      : 50 
+    \     },
+    \     'top': {
+    \       'split'     : 'split',
+    \       'position'  : 'topleft',
+    \       'resize'    : 'resize',
+    \       'size'      : 15 
+    \     },
+    \     'bottom': {
+    \       'split'     : 'split',
+    \       'position'  : 'botright',
+    \       'resize'    : 'resize',
+    \       'size'      : 15 
+    \     }
+    \ }
+
 function! tidyterm#buffer#Commands() abort
-    let l:position_map = tidyterm#config#GetPositionMap()
-    let s:cmd_position = l:position_map['position']
-    let s:cmd_resize = l:position_map['resize']
-    let s:cmd_split = l:position_map['split']
-    let s:cmd_size = l:position_map['size']
+    let s:cmd_side      = get(g:, 'tidyterm_position', 'bottom')
+    let l:cmd_map       = copy(s:tidyterm_map[s:cmd_side])
+    let s:cmd_position  = get(l:cmd_map,'position','botright')   
+    let s:cmd_resize    = get(l:cmd_map,'resize','resize')   
+    let s:cmd_split     = get(l:cmd_map,'split','split')   
+    let s:cmd_size      = get(l:cmd_map,'size',15)   
+    let s:cmd_size      = get(g:, 'tidyterm_size',s:cmd_size)
 endfunction
 
 function! tidyterm#buffer#ToPrevious() abort
-    if exists('g:prev_winid') && win_gotoid(g:prev_winid) == 0 | wincmd p | endif
+    if win_gotoid(g:prev_winid) == 0 | wincmd p | endif
 endfunction
 
-function! tidyterm#buffer#ToCurrent(bufnr) abort
-    execute 'buffer' a:bufnr
+function! tidyterm#buffer#ToCurrent() abort
+    execute 'buffer' g:term_bufnr
 endfunction
 
 function! tidyterm#buffer#Resize() abort
@@ -28,49 +57,27 @@ function! tidyterm#buffer#CallTerminal() abort
     else
         call term_start(&shell, {'curwin': v:true})
     endif
-    
+    let g:term_bufnr = bufnr('%')
     call tidyterm#buffer#SetFiletype()
-    
-    if tidyterm#config#Get('auto_cd')
-        let l:project_root = tidyterm#session#GetProjectRoot()
-        if isdirectory(l:project_root)
-            if has('nvim')
-                call chansend(bufnr('%'), 'cd ' . shellescape(l:project_root) . "\n")
-            else
-                call term_sendkeys(bufnr('%'), 'cd ' . shellescape(l:project_root) . "\n")
-            endif
-        endif
-    endif
 endfunction
 
 function! tidyterm#buffer#SetFiletype() abort
-    let l:filetype = tidyterm#config#Get('filetype')
-    if !empty(l:filetype)
-        execute 'setlocal filetype=' . l:filetype
-    endif
+    execute 'setlocal filetype=tidyterm'
 endfunction
 
-function! tidyterm#buffer#Get(terminal_name) abort
+function! tidyterm#buffer#Get() abort
     let g:prev_winid = win_getid()
     call tidyterm#buffer#Commands()
-    
-    let l:terminals = tidyterm#session#GetTerminals()
-    let l:buffer_info = get(l:terminals, a:terminal_name, {})
-    
-    if !has_key(l:buffer_info, 'bufnr') || !bufexists(l:buffer_info['bufnr']) || !buflisted(l:buffer_info['bufnr'])
+
+    if !bufexists(g:term_bufnr) || !buflisted(g:term_bufnr)
         call tidyterm#buffer#Open()
         call tidyterm#buffer#CallTerminal()
-        let l:buffer_info['bufnr'] = bufnr('%')
     else
         call tidyterm#buffer#Open()
-        call tidyterm#buffer#ToCurrent(l:buffer_info['bufnr'])
+        call tidyterm#buffer#ToCurrent()
     endif
 
     call tidyterm#buffer#Resize()
-    let l:buffer_info['winid'] = win_getid()
-    
-    call tidyterm#session#AddTerminal(a:terminal_name, l:buffer_info)
-    
-    return l:buffer_info
+    let g:term_winid = win_getid()
 endfunction
 
